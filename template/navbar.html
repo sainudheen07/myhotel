@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     <link rel="stylesheet" href="{%  static 'css/bootstrap.min.css' %}" >
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<style>
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+* {
+    margin: 0;
+    padding: 0;
+}
+.nav {
+    background: #232323;
+    height: 60px;
+    display: inline-block;
+    width:100%;
+}
+
+.nav li {
+    float:left;
+    list-style-type: none;
+    position:relative;
+}
+#search {
+    float:right;
+    width: 357px;
+    margin: 4px;
+}
+#search_text{
+    width: 297px;
+    padding: 15px 0 15px 20px;
+    font-size: 16px;
+    font-family: Montserrat, sans-serif;
+    border: 0 none;
+    height: 52px;
+    margin-right: 0;
+    color: white;
+    outline: none;
+    background: #1f7f5c;
+    float: left;
+    box-sizing: border-box;
+    transition: all 0.15s;
+}
+::-webkit-input-placeholder { /* WebKit browsers */
+    color: white;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: white;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: white;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: white;
+}
+#search_text:focus {
+    background: rgb(64, 151, 119);
+}
+#search_button {
+    border: 0 none;
+    background: #1f7f5c url(search.png) center no-repeat;
+    width: 60px;
+    float: left;
+    padding: 0;
+    text-align: center;
+    height: 52px;
+    cursor: pointer;
+}
+#options a{
+    border-left: 0 none;
+}
+#options&gt;a {
+    background-image: url(triangle.png);
+    background-position: 85% center;
+    background-repeat: no-repeat;
+    padding-right: 22px;
+}
+.subnav {
+    visibility: hidden;
+    position: absolute;
+    top: 110%;
+    right: 0;
+    width: 200px;
+    height: auto;
+    opacity: 0;
+    transition: all 0.1s;
+    background: #232323;
+}
+.subnav li {
+    float: none;
+}
+.subnav li a {
+    border-bottom: 1px solid #2e2e2e;
+}
+#options:hover .subnav {
+    visibility: visible;
+    top: 100%;
+    opacity: 1;
+}
+.nav li a {
+    font-size: 16px;
+    color: white;
+    display: block;
+    line-height: 60px;
+    padding: 0 26px;
+    text-decoration: none;
+    border-right: 1px solid #2e2e2e;
+    font-family: Montserrat, sans-serif;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+.nav li a:hover {
+    background-color: #2e2e2e;
+}
+
+#settings a {
+    padding: 18px;
+    height: 24px;
+    font-size: 10px;
+    line-height: 24px;
+}
+</style>
+</head>
+<body>
+
+<ul class="nav">
+    <li>
+    <a class="navbar-brand" style="color:white">  FLIP MART</a>
+    </li>
+    <li>
+         {% if item_count > 0 %}
+        <a href="{% url 'cart:cart_detail' %}"><i class="fa fa-shopping-cart" style="font-size:16px"></i></a>
+        <li style="font-color:white">
+      {{ item_count }}</li>
+         {% endif %}
+
+    </li>
+
+<li id="options">
+        <a href="#">Shop</a>
+        <ul class="subnav">
+{% for cat in links %}
+            <li><a href="{{cat.get_url}}">{{cat.name}}</a></li>
+            {% endfor %}
+        </ul>
+    </li>
+
+    <li id="option" class="navbar-right">
+        {% if user.is_authenticated %}
+
+            <li class="nav-item active"><a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a></li>
+                <li class="nav-item active" ><a style="font-color:white">Hai {{user.username}}</a></li>
+        {% else %}
+            <li class="nav-item active"><a class="nav-link" href="{% url 'accounts:register' %}">signup</a></li>
+
+            <li class="nav-item active"><a class="nav-link" href="{% url 'accounts:login' %}">Login</a></li>
+        {% endif %}
+
+
+    </li>
+
+<li id="search" class="navbar-nav navbar-right">
+        <form action="{% url 'search_app:SearchResult' %}" method="get">
+            {% csrf_token %}
+            <input type="text" name="q" id="search_text" placeholder="Search"/>
+             <button type="submit" style="width:54px;height:54px"><i class="fa fa-search"></i></button>
+        </form>
+    </li>
+</ul>
+</body>
+</html>
+<!--<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
+
+<!--  <div class="container-fluid">-->
+
+<!--    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--      <span class="navbar-toggler-icon"></span>-->
+<!--    </button>-->
+<!--    <div class="collapse navbar-collapse" id="navbarSupportedContent">-->
+<!--      <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
+
+<!--         {% if user.is_authenticated %}-->
+
+<!--          <li>Hai {{user.username}}</li>-->
+<!--          <li class="nav-item active"><a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a></li>-->
+<!--          {% else %}-->
+<!--          <li class="nav-item active"><a class="nav-link" href="{% url 'accounts:register' %}">signup</a></li>-->
+
+<!--          <li class="nav-item active"><a class="nav-link" href="{% url 'accounts:login' %}">Login</a></li>-->
+<!--          {% endif %}-->
+
+<!--        <li class="nav-item dropdown" >-->
+<!--            {% if 'shop' in request.path %}-->
+<!--          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--            Shop-->
+<!--          </a>-->
+<!--          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+<!--            <li><a class="dropdown-item" href="{% url 'shop:allProdCat' %}">All Products</a></li>-->
+<!--               {% for cat in links %}-->
+<!--            <li><a class="dropdown-item" href="{{cat.get_url}}">{{cat.name}}</a></li>-->
+
+<!--                {% endfor %}-->
+
+<!--             {% endif %}-->
+
+<!--          </ul>-->
+<!--        </li>-->
+<!--        {% if item_count > 0 %}-->
+<!--        <li class="nav-item">-->
+<!--          <a class="nav-link " href="{% url 'cart:cart_detail' %}"><i class="fa fa-shopping-cart"></i>({{item_count}})</a>-->
+<!--        </li>-->
+<!--        {% endif %}-->
+<!--      </ul>-->
+<!--      <form class="d-flex" action="{% url 'search_app:SearchResult' %}" method="get" style="float-left:100%" >-->
+<!--        {% csrf_token %}-->
+<!--        <input class="form-control me-2" type="search" placeholder="Search"  name="q" aria-label="Search">-->
+<!--        <button class="btn btn-outline-success" type="submit"><i class="fa fa-search" ></i></button>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</nav>-->
